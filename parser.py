@@ -18,7 +18,8 @@ class ArgumentParser:
         options = self.parser.add_argument_group('Options')
         options.add_argument('--file', type=str, help='selected the file')
         options.add_argument('--directory', type=str, help='selected the file director')
-        options.add_argument('--export', type=str, help="export folder name")
+        options.add_argument('--folder', type=str, help="export folder name")
+        options.add_argument('--export', type=str, help="folder Export Path")
         
         # Parsers the args
         self.arg = self.parser.parse_args()

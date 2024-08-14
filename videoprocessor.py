@@ -3,9 +3,12 @@ from os import listdir
 import numpy as np
 import cv2
 from multiprocessing import Pool, cpu_count
+import logging as log
+from pathlib import Path
+
+# TODO: get subdirectories working
 
 class VideoProcessor:
-    
     def __init__(self):
         pass
 
@@ -15,20 +18,36 @@ class VideoProcessor:
             parsedVideos = [i for i in arr if i.endswith(".mp4")]
             return parsedVideos
         except:
-            print("That is not a valid path")
-
-    def createFileDirector(name):
-        if not os.path.exists(name):
-            os.makedirs(name)
-        else:
-            print("path Already Exists")
+            log.error('Please check Spelling or if its a valid path')
             quit()
 
-    def splitVideoDirectory(self, path, export):
-        print(self.getVideos(path))
-        for files in self.getVideos(path):
-            self.createFileDirector(str(files))
-            self.splitVideo(files, export)
+    def getFilePath(self):
+        current_file_path = Path(__file__)
+        parent_dir = current_file_path.parent
+        parent_dir_str = str(parent_dir)
+        return str(parent_dir_str)
+
+    def createSubDirectory(self, parentDir, filename):        
+        try:
+            path = os.path.join(parentDir, filename)
+            os.makedirs(path)
+        except:
+            log.error('There was an Error creating sub-directory')
+
+    def createFileDirector(self, filename):
+        try:
+            os.makedirs(str(filename))
+        except:
+            log.error("there was an error. Perhaps the folder already exists")
+            quit()
+
+    def splitVideoDirectory(self, pathtoVideo, pathtoDir, filename):
+        if pathtoDir == None:
+            pathtoDir = self.getFilePath() + '/' + str(filename)
+        
+        for files in self.getVideos(pathtoVideo):
+            #self.createSubDirectory(pathtoDir, files)
+            self.splitVideo(str(pathtoVideo + '\\' + files), filename)
 
     #def splitVideoDirectory(self, video_files, export="frames"):
     #    # Create a multiprocessing Pool
@@ -37,11 +56,15 @@ class VideoProcessor:
     #        # Pool.starmap allows us to pass multiple arguments to the worker function
     #        pool.starmap(self.splitVideo, [(video_file, export) for video_file in video_files])
     
-    def splitVideo(self, path, export):
-        self.createFileDirector(export)
+    def splitVideo(self, path, filename):
+        # if not called it will defualt to dir
+        if not filename:
+            filename = 'dir'
+        # Creates the File Directory
+        self.createFileDirector(filename)
         
         cap = cv2.VideoCapture(path)
-        path_to_save = os.path.abspath("frames")
+        path_to_save = os.path.abspath(filename)
         
         current_frame = 1
 
@@ -56,7 +79,7 @@ class VideoProcessor:
             if(ret == True):
 
                 # Save frame as a jpg file
-                name = 'frame' + str(current_frame) + '.jpg'
+                name = str(current_frame) + '.jpg'
                 print(f'Creating: {name}')
                 cv2.imwrite(os.path.join(path_to_save, name), frame)
 
@@ -72,3 +95,8 @@ class VideoProcessor:
         # release capture 
         cap.release()
         print('done')
+        
+if __name__ == '__main__':
+    app = VideoProcessor()
+    Videos = app.getVideos('C:/Assets/Programming/python/VideSplit/videos')
+    print(Videos)
