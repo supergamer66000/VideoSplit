@@ -16,7 +16,7 @@ def main():
 
     # Process a single file
     if args.file:
-        video_processor.split_video(video_path=args.file, output_dir=args.folder, create_dir=True)
+        video_processor.split_video(video_path=args.file, output_dir=args.folder)
     
     # Process a directory of videos
     elif args.directory:

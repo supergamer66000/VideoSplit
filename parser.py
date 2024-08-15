@@ -24,15 +24,6 @@ class ArgumentParser:
         # Parsers the args
         self.arg = self.parser.parse_args()
     
-    def getFile(self):
-        return self.arg.file
-    
-    def getDirector(self):
-        return self.arg
-    
-    def getExport(self):
-        return self.arg.export
-    
     def getNoArgs(self):
         if len(sys.argv) > 1:
             return True
