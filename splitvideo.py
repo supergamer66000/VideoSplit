@@ -1,26 +1,33 @@
+import logging as log
 from parser import ArgumentParser
 from videoprocessor import VideoProcessor
-import logging as log
+
+def main():
+    # Initialize the argument parser and parse arguments
+    parser = ArgumentParser()
+    args = parser.arg
+
+    # Check if both file and directory arguments are provided
+    if args.file and args.directory:
+        log.info("You cannot specify both a file and a directory.")
+        return
+
+    video_processor = VideoProcessor()
+
+    # Process a single file
+    if args.file:
+        video_processor.split_video(video_path=args.file, output_dir=args.folder, create_dir=True)
+    
+    # Process a directory of videos
+    elif args.directory:
+        videos = video_processor.get_videos(args.directory)
+        
+        # Check if the directory is empty or contains no .mp4 files
+        if not videos:
+            log.warning('The directory is empty or does not contain any .mp4 files.')
+            return
+        
+        video_processor.split_video_directory(video_dir=args.directory, output_dir=args.export, filename=args.folder)
 
 if __name__ == '__main__':
-    # Starts the parser
-    ArgumentParser()
-    arg = ArgumentParser().arg
-
-    # checks if both are present
-    if arg.file and arg.directory:
-        print("You can not have both")
-        quit()
-
-    # Checks if one of the arguments are called
-    if arg.file:
-        VideoProcessor().splitVideo(path=arg.file, export=arg.folder)
-    elif arg.directory:
-        videos = VideoProcessor().getVideos(arg.directory)
-        
-        # Checks if the folder is empty
-        if videos == []:
-            log.warning('This Folder is Empty or does not contain .mp4 file format')
-            quit()
-        
-        VideoProcessor().splitVideoDirectory(pathtoVideo=arg.directory, pathtoDir=arg.export, filename=arg.folder)
+    main()
