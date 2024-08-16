@@ -1,8 +1,6 @@
 import argparse
 import sys
 import logging as log
-import os
-
 
 class ArgumentParser:
     def __init__(self):

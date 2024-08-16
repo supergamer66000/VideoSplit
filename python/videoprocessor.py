@@ -104,7 +104,7 @@ class VideoProcessor:
         video_count = self.get_videos_length(video_dir, date)
         
         if filename is None:
-            filename = 'dir'
+            filename = 'exported'
         if output_dir is None:
             output_dir = os.path.join(self.get_file_path(), filename)
         if cores is None:
