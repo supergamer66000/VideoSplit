@@ -106,7 +106,7 @@ class VideoProcessor:
 
         # Use multiprocessing to process each video in parallel
         with Pool(processes=cores) as pool:
-            list(tqdm(pool.imap(self.process_video, video_files_info), total=video_count, bar_format='{desc:<5.5}{percentage:3.0f}%|{bar:10}{r_bar}'))
+            pool.map(self.process_video, video_files_info)
 
         print("done!")
 
