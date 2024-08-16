@@ -4,29 +4,38 @@ import logging as log
 from pathlib import Path
 from datetime import datetime
 from multiprocessing import Pool, cpu_count
-from tqdm import tqdm
 
 class VideoProcessor:
     def __init__(self):
         pass
 
-    def get_date_components(file_path):
+    def get_date_components(self, file_path):
         """Convertes file_path to a date"""
         path = Path(file_path)
         timestamp = path.stat().st_ctime
         date_time = datetime.fromtimestamp(timestamp)
         return [date_time.year, date_time.month, date_time.day]
 
-    def get_videos(self, path):
+    def get_videos(self, path, date=None):
         """Retrieve a list of .mp4 video files in the specified directory."""
         try:
-            return [file for file in os.listdir(path) if file.endswith(".MP4") or file.endswith('.mp4')]
+            files = []
+            for file in os.listdir(path):
+                if file.endswith(".MP4") or file.endswith('.mp4'):
+                    path_to_video = os.path.join(path, file)
+                    file_dates = self.get_date_components(path_to_video)
+                    if date is None:
+                        files.append(file)
+                    elif file_dates == date:
+                        files.append(file)
+            #return [file for file in os.listdir(path) if file.endswith(".MP4") or file.endswith('.mp4')]
+            return files
         except Exception as e:
             log.error(f"Error accessing directory: {e}")
             quit()
     
-    def get_videos_length(self, path) -> int:
-        return int(len(self.get_videos(path)))
+    def get_videos_length(self, path, date) -> int:
+        return int(len(self.get_videos(path, date)))
 
     @staticmethod
     def get_file_path():
@@ -87,12 +96,12 @@ class VideoProcessor:
         video_output_dir = os.path.join(output_dir, video_file)
         self.create_subdirectory(output_dir, video_file)
         self.split_video(os.path.join(video_dir, video_file), video_output_dir)
-        print(f" Processed {video_file}")
+        print(f"Processed {video_file}")
 
-    def split_video_directory(self, video_dir, filename=None, output_dir=None, cores=None):
+    def split_video_directory(self, video_dir, date, filename=None, output_dir=None, cores=None):
         """Split videos in a directory into frames using multiprocessing."""
-        print(f"{self.get_videos_length(video_dir)} videos")
-        video_count = self.get_videos_length(video_dir)
+        print(f"{self.get_videos_length(video_dir, date)} videos")
+        video_count = self.get_videos_length(video_dir, date)
         
         if filename is None:
             filename = 'dir'
@@ -101,15 +110,14 @@ class VideoProcessor:
         if cores is None:
             cores=cpu_count()
         
-        videos = self.get_videos(video_dir)
+        videos = self.get_videos(video_dir, date)
         video_files_info = [(video_dir, video_file, output_dir) for video_file in videos]
 
         # Use multiprocessing to process each video in parallel
         with Pool(processes=cores) as pool:
-            list(tqdm(pool.imap(self.process_video, video_files_info), total=video_count, bar_format='{desc:<5.5}{percentage:3.0f}%|{bar:10}{r_bar}'))
+            pool.map(self.process_video, video_files_info)
 
         print("done!")
 
 if __name__ == '__main__':
-    print('Dont run this')
-    quit()
+    print("Why you running this")
