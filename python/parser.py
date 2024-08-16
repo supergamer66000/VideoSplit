@@ -20,6 +20,8 @@ class ArgumentParser:
         options.add_argument('--directory', type=str, help='selected the file director')
         options.add_argument('--folder', type=str, help="export folder name")
         options.add_argument('--export', type=str, help="folder Export Path")
+        options.add_argument('--core-count', type=int, help="Specify how many core the programe uses")
+        options.add_argument('--time', type=str, help='Allow you to only do file that were created on a spicific date')
         
         # Parsers the args
         self.arg = self.parser.parse_args()

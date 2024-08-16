@@ -27,7 +27,7 @@ def main():
             log.warning('The directory is empty or does not contain any .mp4 files.')
             return
         
-        video_processor.split_video_directory(video_dir=args.directory, output_dir=args.export, filename=args.folder)
+        video_processor.split_video_directory(video_dir=args.directory, output_dir=args.export, filename=args.folder, cores=args.core_count)
 
 if __name__ == '__main__':
     main()

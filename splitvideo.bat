@@ -1,2 +1,2 @@
 @echo off
-.venv\Scripts\python.exe .\splitvideo.py %*
+.venv\Scripts\python.exe .\python\splitvideo.py %*
