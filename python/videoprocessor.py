@@ -15,7 +15,6 @@ class VideoProcessor:
         timestamp = path.stat().st_ctime
         date_time = datetime.fromtimestamp(timestamp)
         return [date_time.year, date_time.month, date_time.day]
-
     def get_videos(self, path, date=None):
         """Retrieve a list of .mp4 video files in the specified directory."""
         try:
@@ -77,16 +76,13 @@ class VideoProcessor:
             log.error('Failed to open video file.')
             return
         
-        current_frame = 1
-        while cap.isOpened():
+        length = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+        for i in range(length):
             ret, frame = cap.read()
             if ret:
-                frame_name = f"{current_frame}.jpg"
+                frame_name = f"{i}.jpg"
                 cv2.imwrite(os.path.join(output_dir, frame_name), frame)
                 log.info(f"Creating: {frame_name}")
-                current_frame += 1
-            else:
-                break
         cap.release()
         log.info('Video processing complete.')
 
