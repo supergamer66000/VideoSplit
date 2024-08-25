@@ -40,3 +40,6 @@ class ArgumentParser:
         if len(sys.argv) > 1:
             return True
         return False
+
+if __name__ == '__main__':
+    print("Why you running this?")

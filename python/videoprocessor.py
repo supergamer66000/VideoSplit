@@ -138,4 +138,4 @@ class VideoProcessor:
         print("done!")
 
 if __name__ == '__main__':
-    print("Why you running this")
+    print("Why you running this?")
