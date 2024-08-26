@@ -1,17 +1,18 @@
 @echo off
 
 if "%1" == "setup" (
-    if "%2"=="" (
+    if "%2" == "" (
         python setup.py
     ) else (
-        %2 setup.py
+        echo Path has been specified: %2
+        call %2 setup.py
+        if errorlevel 1 (
+            echo ERROR: Please ensure this is a valid path
+        )
     )
-    goto :eof
+) else (
+    .venv\Scripts\python.exe .\python\splitvideo.py %*
+    if errorlevel 1 (
+        echo ERROR: Please ensure you have run splitvideo.bat setup
+    )
 )
-
-%@try%
-.venv\Scripts\python.exe .\python\splitvideo.py %*
-%@EndTry%
-:@Catch
-echo ERROR: Please ensure you have ran splitvideo.bat setup
-:@EndCatch
