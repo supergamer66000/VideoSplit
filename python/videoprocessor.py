@@ -17,14 +17,12 @@ class VideoProcessor:
         date_time = datetime.fromtimestamp(timestamp)
         return [date_time.year, date_time.month, date_time.day]
 
-    def get_objects(self, path, type=None, date=None):
+    def get_objects(self, path, type, date=None):
         """Retrieve a list of .mp4 video files in the specified directory."""
-        if type is None:
-            type = ".mp4"
         try:
             files = []
             for file in os.listdir(path):
-                if file.endswith(str(type)) or file.endswith(str(type.upper())):
+                if file.endswith(str(type)) or file.endswith(str(type).upper()):
                     path_to_video = os.path.join(path, file)
                     file_dates = self.get_date_components(path_to_video)
                     if date is None:
@@ -89,8 +87,8 @@ class VideoProcessor:
     def split_video(self, video_path, output_dir, create_dir=True):
         """Split a video into frames and save them to the specified directory."""
         if output_dir is None:
-            output_dir = self.get_file_path() + "\\" + "dir"
-            
+            output_dir = self.get_file_path() + "\\" + 'dir'
+ 
         if create_dir:
             self.create_directory(output_dir)
 
@@ -117,9 +115,9 @@ class VideoProcessor:
         self.split_video(os.path.join(video_dir, video_file), video_output_dir)
         print(f"Processed {video_file}")
 
-    def split_video_directory(self, video_dir, date, type=None, filename=None, output_dir=None, cores=None):
+    def split_video_directory(self, video_dir, date, filename=None, output_dir=None, cores=None):
         """Split videos in a directory into frames using multiprocessing."""
-        print(f"{self.get_object_length(video_dir, date, type)} .mp4 videos")
+        #print(f"{self.get_object_length(video_dir, date, type)} .mp4 videos")
         
         if filename is None:
             filename = 'exported'
@@ -128,7 +126,10 @@ class VideoProcessor:
         if cores is None:
             cores=cpu_count()
         
-        videos = self.get_objects(video_dir, date)
+        videos = self.get_objects(video_dir, date=date, type=".mp4")
+        if videos == []:
+            log.warn("The folder is empty")
+        
         video_files_info = [(video_dir, video_file, output_dir) for video_file in videos]
 
         # Use multiprocessing to process each video in parallel

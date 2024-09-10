@@ -4,6 +4,7 @@ import sys
 
 class Setup:
     def __init__(self):
+        print("Installing...")
         if self.check_python_version():
             self.setup()
             
@@ -23,6 +24,7 @@ class Setup:
         # Installes all the packages
         self.install_package("opencv-python")
         self.install_package("moviepy")
+        self.install_package("click")
         
         # Runs the help Command
         self.print_title()

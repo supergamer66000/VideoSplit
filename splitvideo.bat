@@ -1,5 +1,7 @@
 @echo off
 
+:: install function
+:install
 if "%1" == "setup" (
     if "%2" == "" (
         python setup.py
@@ -10,9 +12,15 @@ if "%1" == "setup" (
             echo ERROR: Please ensure this is a valid path
         )
     )
-) else (
+)
+
+:: Check if the .venv exists
+if exist .venv\ (
     .venv\Scripts\python.exe .\python\splitvideo.py %*
+) else (
+    call install
     if errorlevel 1 (
-        echo ERROR: Please ensure you have run splitvideo.bat setup
+        echo ERROR: Ensure you have ran: splitvideo.bat setup
+        exit /b 0
     )
 )
