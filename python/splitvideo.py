@@ -37,13 +37,13 @@ class Parser:
     
     @cli.command()
     @click.argument('PATH')
-    @click.option('--export')
+    @click.option('--export', type=click.Path())
     def file(path, export) -> None:
         VideoProcessor().split_video(path, export)
     
     @cli.command()
     @click.argument('PATH')
-    @click.option('--export')
+    @click.option('--export', type=click.Path())
     @click.option('--date')
     @click.option('--core-count/-c')
     def dir(path, export, date, core_count):
@@ -53,7 +53,6 @@ class Parser:
     
     @cli.command()
     @click.argument('DIRECTORY')
-    #@click.option('--export')
     @click.option('--fps')
     @click.option('--type')
     def build(directory, fps, type):
