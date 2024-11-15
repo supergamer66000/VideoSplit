@@ -3,3 +3,5 @@ videos
 test.py
 /.venv
 /dist
+/build
+splitvideo.spec
