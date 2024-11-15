@@ -38,7 +38,8 @@ class Parser:
     @cli.command()
     @click.argument('PATH')
     @click.option('--export', type=click.Path())
-    def file(path, export) -> None:
+    #@click.option('--cuda', type=click.BOOL, help="WIP")
+    def file(path, export, cuda) -> None:
         VideoProcessor().split_video(path, export)
     
     @cli.command()

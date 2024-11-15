@@ -114,6 +114,9 @@ class VideoProcessor:
         self.create_subdirectory(output_dir, video_file)
         self.split_video(os.path.join(video_dir, video_file), video_output_dir)
         print(f"Processed {video_file}")
+    
+    def process_video_with_cuda(self):
+        pass
 
     def split_video_directory(self, video_dir, date, filename=None, output_dir=None, cores=None):
         """Split videos in a directory into frames using multiprocessing."""

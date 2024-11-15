@@ -1,4 +1,5 @@
-/__pycache__
+*/__pycache__
 videos
 test.py
 /.venv
+/dist
