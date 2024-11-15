@@ -37,16 +37,16 @@ class Parser:
     
     @cli.command()
     @click.argument('PATH')
-    @click.option('--export', type=click.Path())
+    @click.option('--export', type=click.Path(), help="Output Directory")
     #@click.option('--cuda', type=click.BOOL, help="WIP")
     def file(path, export, cuda) -> None:
         VideoProcessor().split_video(path, export)
     
     @cli.command()
     @click.argument('PATH')
-    @click.option('--export', type=click.Path())
-    @click.option('--date')
-    @click.option('--core-count/-c')
+    @click.option('--export', type=click.Path(), help="Output Directory")
+    @click.option('--date', help="Allows for sorting by date. EX: Year/Month/Day")
+    @click.option('--core-count/-c', help="Specify how many cores the program uses")
     def dir(path, export, date, core_count):
         if not core_count:
             core_count = None
@@ -54,8 +54,8 @@ class Parser:
     
     @cli.command()
     @click.argument('DIRECTORY')
-    @click.option('--fps')
-    @click.option('--type')
+    @click.option('--fps', help="Specify the frame rate")
+    @click.option('--type', help="Allow you to build it into different file formant eg .mp4 or .mov")
     def build(directory, fps, type):
         if not type:
             type = None
